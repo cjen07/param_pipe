@@ -14,7 +14,13 @@ defmodule ParamPipe do
   end
 
   defp unpipe({:>, _, [left, right]}, acc) do
-    [{right, left} | acc]
+    case right do
+      {:|>, _, _} ->
+        [{h, _} | t] = Macro.unpipe(right) 
+        [{h, left} | t] ++ acc
+      _ ->
+        [{right, left} | acc]
+    end
   end
 
   defp unpipe(other, acc) do
@@ -34,4 +40,5 @@ defmodule ParamPipe do
       Macro.pipe(acc, x, pos)
     end, h, t
   end
+
 end
