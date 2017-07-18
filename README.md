@@ -17,5 +17,5 @@
 
 ## remark
 
-* mixed usage with '|> is not supported currently
+* mixed usage with `|>` is not supported currently
 
