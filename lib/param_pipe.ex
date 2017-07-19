@@ -19,7 +19,12 @@ defmodule ParamPipe do
         [{h, _} | t] = Macro.unpipe(right) 
         [{h, left} | t] ++ acc
       _ ->
-        [{right, left} | acc]
+        case left do
+          {:-, _, [n]} ->
+            [{right, -n} | acc]
+          _ -> 
+            [{right, left} | acc]
+        end
     end
   end
 

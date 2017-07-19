@@ -13,8 +13,10 @@
     100 |> div(5) |> div(2) # 10
   end
 
+  # negative n in |n> is supported 
+
   def bar1() do
-    1 |0> foo(0, 0) |1> foo(0, 0) |2> foo(0, 0) # 24
+    1 |0> foo(0, 0) |1> foo(0, 0) |-1> foo(0, 0) # 24
   end
 
   # mixed usage with |> is supported
@@ -27,7 +29,7 @@
     |> div(3) # 1
     |2> foo(0, 0) # 4
     |> (fn x -> foo(0, 0, x) end).() # 16
-    |0> foo(0, 0) # 32
+    |-1> foo(0, 0) # 64
   end
 ```
 
