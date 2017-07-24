@@ -5,9 +5,26 @@ defmodule ParamPipe.Mixfile do
     [
       app: :param_pipe,
       version: "0.1.0",
-      elixir: "~> 1.5-rc",
+      elixir: "~> 1.4",
       start_permanent: Mix.env == :prod,
+      description: description(),
+      package: package(),
       deps: deps()
+    ]
+  end
+
+  defp description do
+    """
+      parameterized pipe in elixir: |n> 
+    """
+  end
+
+  defp package do
+    [
+      files: ["lib/param_pipe.ex", "mix.exs", "README.md"],
+      maintainers: ["Chen Wang"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/cjen07/param_pipe"}
     ]
   end
 
@@ -21,6 +38,7 @@ defmodule ParamPipe.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:ex_doc, ">= 0.0.0", only: :dev}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
     ]
