@@ -5,8 +5,38 @@ defmodule ParamPipe do
     end
   end
 
+  def parse_index(expr) do
+    case expr do
+      {:-, _, [n]} ->
+        -n
+      _ -> 
+        expr
+    end
+  end
+
   def unpipe(expr) do
     unpipe(expr, [])
+  end
+
+  defp unpipe({:=, _, [left, right]}, acc) do
+    # IO.puts "--------------------------"
+    # IO.inspect left
+    # IO.inspect right
+    # IO.inspect acc
+    # IO.puts "--------------------------"
+    case left do
+      {:>, _, [index, code]} ->
+        l = parse_index(index)
+        case code do
+          {:|>, _, _} ->
+            [{h, _} | t] = Macro.unpipe(code)
+            [{h, l} | t] ++ [{{:=, [], [right]}, 1}, {right, 0}] ++ acc
+          _ ->
+            [{code, l}, {{:=, [], [right]}, 1}, {right, 0}] ++ acc
+        end
+      _ ->
+        [{right, 0} | acc] ++ [{{:=, [], [left]}, 1}]
+    end
   end
 
   defp unpipe({:|, _, [left, right]}, acc) do
@@ -14,17 +44,13 @@ defmodule ParamPipe do
   end
 
   defp unpipe({:>, _, [left, right]}, acc) do
+    l = parse_index(left)
     case right do
       {:|>, _, _} ->
-        [{h, _} | t] = Macro.unpipe(right) 
-        [{h, left} | t] ++ acc
+        [{h, _} | t] = Macro.unpipe(right)
+        [{h, l} | t] ++ acc
       _ ->
-        case left do
-          {:-, _, [n]} ->
-            [{right, -n} | acc]
-          _ -> 
-            [{right, left} | acc]
-        end
+        [{right, l} | acc]
     end
   end
 
@@ -33,17 +59,38 @@ defmodule ParamPipe do
   end
 
   defmacro left | right do
-    # similar to |> definiation
-    [{h, _} | t] = unpipe({:|, [], [left, right]})
-    :lists.foldl fn {x, pos}, acc ->
-      # TODO: raise an error in `Macro.pipe/3` by 2.0
-      case Macro.pipe_warning(x) do
-        nil -> :ok
-        message ->
-          :elixir_errors.warn(__CALLER__.line, __CALLER__.file, message)
+    # IO.puts "--------------------------"
+    # IO.inspect(left)
+    # IO.inspect(right)
+
+    # IO.inspect unpipe({:|, [], [left, right]})
+    # :ok
+    unpipe({:|, [], [left, right]})
+    |> Enum.reduce({[], []}, fn x, {a, cc} -> 
+      case elem(x, 0) do
+        {_, _, nil} ->
+          {[x], [a | cc]}
+        _ ->
+          {[x | a], cc}
       end
-      Macro.pipe(acc, x, pos)
-    end, h, t
+    end)
+    |> (fn {a, cc} -> 
+      [a | cc] 
+      |> Enum.map(&Enum.reverse/1)
+      |> Enum.reverse()
+    end).()
+    |> Enum.map(fn [{h, _} | t] -> 
+      :lists.foldl fn {x, pos}, acc ->
+        case Macro.pipe_warning(x) do
+          nil -> :ok
+          message ->
+            :elixir_errors.warn(__CALLER__.line, __CALLER__.file, message)
+        end
+        Macro.pipe(acc, x, pos)
+      end, h, t
+    end)
+    |> (fn x -> {:__block__, [], x} end).()
+  
   end
 
 end
