@@ -68,6 +68,12 @@ defmodule ParamPipe do
       |> Enum.map(&Enum.reverse/1)
       |> Enum.reverse()
     end).()
+    |> (fn [h | t] -> 
+      case h do
+        [] -> t
+        _ -> [h | t]
+      end
+    end).()
     |> Enum.map(fn [{h, _} | t] -> 
       :lists.foldl fn {x, pos}, acc ->
         case Macro.pipe_warning(x) do
