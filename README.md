@@ -1,5 +1,15 @@
 # ParamPipe
 
+## Installation
+
+```elixir
+def deps do
+  [
+    {:param_pipe, "~> 0.1.1"}
+  ]
+end
+```
+
 ## parameterized pipe in elixir: |n>
 
 ```elixir
