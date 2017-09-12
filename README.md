@@ -5,7 +5,7 @@
 ```elixir
 def deps do
   [
-    {:param_pipe, "~> 0.1.1"}
+    {:param_pipe, "~> 0.1.2"}
   ]
 end
 ```
