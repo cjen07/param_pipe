@@ -1,4 +1,5 @@
 defmodule Q do
+  @moduledoc false
   use ParamPipe
   
   def foo(a, b, c) do

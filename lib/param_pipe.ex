@@ -19,11 +19,6 @@ defmodule ParamPipe do
   end
 
   defp unpipe({:=, _, [left, right]}, acc) do
-    # IO.puts "--------------------------"
-    # IO.inspect left
-    # IO.inspect right
-    # IO.inspect acc
-    # IO.puts "--------------------------"
     case left do
       {:>, _, [index, code]} ->
         l = parse_index(index)
@@ -59,12 +54,6 @@ defmodule ParamPipe do
   end
 
   defmacro left | right do
-    # IO.puts "--------------------------"
-    # IO.inspect(left)
-    # IO.inspect(right)
-
-    # IO.inspect unpipe({:|, [], [left, right]})
-    # :ok
     unpipe({:|, [], [left, right]})
     |> Enum.reduce({[], []}, fn x, {a, cc} -> 
       case elem(x, 0) do
