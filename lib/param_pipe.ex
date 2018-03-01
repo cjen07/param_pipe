@@ -9,7 +9,7 @@ defmodule ParamPipe do
     case expr do
       {:-, _, [n]} ->
         -n
-      _ -> 
+      _ ->
         expr
     end
   end
@@ -55,7 +55,7 @@ defmodule ParamPipe do
 
   defmacro left | right do
     unpipe({:|, [], [left, right]})
-    |> Enum.reduce({[], []}, fn x, {a, cc} -> 
+    |> Enum.reduce({[], []}, fn x, {a, cc} ->
       case elem(x, 0) do
         {_, _, nil} ->
           {[x], [a | cc]}
@@ -63,29 +63,29 @@ defmodule ParamPipe do
           {[x | a], cc}
       end
     end)
-    |> (fn {a, cc} -> 
-      [a | cc] 
+    |> (fn {a, cc} ->
+      [a | cc]
       |> Enum.map(&Enum.reverse/1)
       |> Enum.reverse()
     end).()
-    |> (fn [h | t] -> 
+    |> (fn [h | t] ->
       case h do
         [] -> t
         _ -> [h | t]
       end
     end).()
-    |> Enum.map(fn [{h, _} | t] -> 
+    |> Enum.map(fn [{h, _} | t] ->
       :lists.foldl fn {x, pos}, acc ->
-        case Macro.pipe_warning(x) do
-          nil -> :ok
-          message ->
-            :elixir_errors.warn(__CALLER__.line, __CALLER__.file, message)
-        end
+        # case Macro.pipe_warning(x) do
+        #   nil -> :ok
+        #   message ->
+        #     :elixir_errors.warn(__CALLER__.line, __CALLER__.file, message)
+        # end
         Macro.pipe(acc, x, pos)
       end, h, t
     end)
     |> (fn x -> {:__block__, [], x} end).()
-  
+
   end
 
 end
