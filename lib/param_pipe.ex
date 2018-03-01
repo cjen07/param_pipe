@@ -76,12 +76,13 @@ defmodule ParamPipe do
     end).()
     |> Enum.map(fn [{h, _} | t] ->
       :lists.foldl fn {x, pos}, acc ->
-        # case Macro.pipe_warning(x) do
-        #   nil -> :ok
-        #   message ->
-        #     :elixir_errors.warn(__CALLER__.line, __CALLER__.file, message)
-        # end
-        Macro.pipe(acc, x, pos)
+        {call, line, arg} = x
+        cond do
+          call != := -> Macro.pipe(acc, x, pos)
+          true ->
+            {_, l, a} = Macro.pipe(acc, {:helper, line, arg}, pos)
+            {:=, l, a}
+        end
       end, h, t
     end)
     |> (fn x -> {:__block__, [], x} end).()

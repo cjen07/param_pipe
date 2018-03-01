@@ -25,16 +25,15 @@ defmodule Q do
     |-1> foo(0, 0) # 64
   end
 
-  # def bar3() do
-  #   h =
-  #     1
-  #     |-2> foo(0, 0) = f # 3 = f
-  #     |-1> foo(0, 0) # 12
-  #     |> foo(0, 0) = g # 24 = g
-  #     |-1> foo(0, 0) # 96
-  #     |> foo(f, g) # 297
-  #   IO.inspect(h+1) # 298
-  #   :ok
-  # end
+  def bar3() do
+    h =
+      1
+      |-2> foo(0, 0) = f # 3 = f
+      |-1> foo(0, 0) # 12
+      |> foo(0, 0) = g # 24 = g
+      |-1> foo(0, 0) # 96
+      |> foo(f, g) # 297
+    h
+  end
 
 end

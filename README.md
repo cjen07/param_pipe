@@ -5,7 +5,7 @@
 ```elixir
 def deps do
   [
-    {:param_pipe, "~> 0.1.2"}
+    {:param_pipe, "~> 0.1.3"}
   ]
 end
 ```
@@ -23,7 +23,7 @@ end
     100 |> div(5) |> div(2) # 10
   end
 
-  # negative n in |n> is supported 
+  # negative n in |n> is supported
 
   def bar1() do
     1 |0> foo(0, 0) |1> foo(0, 0) |-1> foo(0, 0) # 24
@@ -32,7 +32,7 @@ end
   # mixed usage with |> is supported
 
   def bar2() do
-    1 
+    1
     |> foo(0, 0) # 2
     |1> foo(0, 0) # 6
     |> div(2) # 3
@@ -52,8 +52,6 @@ end
       |> foo(0, 0) = g # 24 = g
       |-1> foo(0, 0) # 96
       |> foo(f, g) # 297
-    IO.inspect(h+1) # 298
-    :ok
+    h
   end
 ```
-
