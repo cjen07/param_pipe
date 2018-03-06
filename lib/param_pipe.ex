@@ -18,6 +18,12 @@ defmodule ParamPipe do
     unpipe(expr, [])
   end
 
+  defp unpipe({:=, l, [left, {:|>, _, _} = right]}, acc) do
+    [{h, _} | t] = Macro.unpipe(right)
+    acc = t ++ acc
+    unpipe({:=, l, [left, h]}, acc)
+  end
+
   defp unpipe({:=, _, [left, right]}, acc) do
     case left do
       {:>, _, [index, code]} ->
@@ -86,7 +92,6 @@ defmodule ParamPipe do
       end, h, t
     end)
     |> (fn x -> {:__block__, [], x} end).()
-
   end
 
 end

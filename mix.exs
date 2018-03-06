@@ -4,7 +4,7 @@ defmodule ParamPipe.Mixfile do
   def project do
     [
       app: :param_pipe,
-      version: "0.1.3",
+      version: "0.1.4",
       elixir: "~> 1.6",
       start_permanent: Mix.env == :prod,
       description: description(),
