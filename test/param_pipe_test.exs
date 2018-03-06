@@ -41,4 +41,17 @@ defmodule ParamPipeTest do
     assert a2() == 21
     assert a3() == 15
   end
+
+  def b1() do
+    h =
+      1..10
+      |0> (fn x -> x end).() = f
+      |> Enum.sum()
+      |-2> Q.foo(0, 0)
+    Enum.max(f) + h
+  end
+
+  test "test suite b" do
+    assert b1() == 175
+  end
 end
