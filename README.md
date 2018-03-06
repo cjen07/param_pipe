@@ -1,5 +1,9 @@
 # ParamPipe
 
+## Prerequisite
+* Erlang v20.2
+* Elixir v1.6.2
+
 ## Installation
 
 ```elixir
