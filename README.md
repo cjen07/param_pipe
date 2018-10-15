@@ -1,17 +1,23 @@
 # ParamPipe
 
 ## Prerequisite
-* Erlang v20.2
-* Elixir v1.6.2
+* Erlang v21.0
+* Elixir v1.7.3
 
 ## Installation
 
 ```elixir
 def deps do
   [
-    {:param_pipe, "~> 0.1.4"}
+    {:param_pipe, "~> 0.2.0"}
   ]
 end
+```
+
+## Tests
+
+```elixir
+  mix test
 ```
 
 ## parameterized pipe in elixir: |n>
